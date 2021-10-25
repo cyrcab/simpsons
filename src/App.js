@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+
+import { useState } from 'react';
 import './App.css';
+import axios from 'axios';
+import DisplaySingleQuote from './components/DisplaySingleQuote';
 
 function App() {
+  
+  const sampleQuote = {
+    character: "Rainier Wolfcastle",
+    characterDirection: "Right",
+    image: "https://cdn.glitch.com/3c3ffadc-3406-4440-bb95-d40ec8fcde72%2FRainierWolfcastle.png?1497567511035",
+    quote: "My eyes! The goggles do nothing!"
+  }
+  
+  
+  const getSingleQuote = () => {
+    axios
+    .get('https://simpsons-quotes-api.herokuapp.com/quotes?count=num')
+    .then((response) => response.data)
+    .then((data) => {
+      console.log(data);
+      setQuote(data[0])
+    })
+  }
+  const [quote, setQuote] = useState(sampleQuote);
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <DisplaySingleQuote quote={quote}/>
+    <button type="button" onClick={getSingleQuote}>Get Quote</button>
     </div>
-  );
-}
-
-export default App;
+    );
+  }
+  
+  
+  
+  export default App;
+  
